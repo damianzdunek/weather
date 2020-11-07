@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:weather/network/weatherClientConstants.dart';
 
-import 'forecastSchema.dart';
+import 'schema/forecastSchema.dart';
 
 part 'weatherClient.g.dart';
 
