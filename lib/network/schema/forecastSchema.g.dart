@@ -8,11 +8,15 @@ part of 'forecastSchema.dart';
 
 ForecastSchema _$ForecastSchemaFromJson(Map<String, dynamic> json) {
   return ForecastSchema(
-    json['cod'] as String,
+    (json['list'] as List)
+        ?.map((e) => e == null
+            ? null
+            : ForecastDetailsSchema.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
 Map<String, dynamic> _$ForecastSchemaToJson(ForecastSchema instance) =>
     <String, dynamic>{
-      'cod': instance.cod,
+      'list': instance.list,
     };
