@@ -10,6 +10,6 @@ part 'weatherClient.g.dart';
 abstract class WeatherClient {
   factory WeatherClient(Dio dio) = _WeatherClient;
 
-  @GET("forecast?APPID=${WeatherClientConstants.appId}&units=metric&lat=51.786691&lon=19.469261")
-  Future<ForecastSchema> getForecast();
+  @GET("forecast?APPID=${WeatherClientConstants.appId}&units=metric")
+  Future<ForecastSchema> getForecast(@Query("lat") double lat, @Query("lon") double lon);
 }

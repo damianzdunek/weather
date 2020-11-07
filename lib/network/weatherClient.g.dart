@@ -17,12 +17,14 @@ class _WeatherClient implements WeatherClient {
   String baseUrl;
 
   @override
-  Future<ForecastSchema> getForecast() async {
+  Future<ForecastSchema> getForecast(lat, lon) async {
+    ArgumentError.checkNotNull(lat, 'lat');
+    ArgumentError.checkNotNull(lon, 'lon');
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'lat': lat, r'lon': lon};
     final _data = <String, dynamic>{};
     final _result = await _dio.request<Map<String, dynamic>>(
-        'forecast?APPID=c12c4f042b6b42293d57b8b37a11147f&units=metric&lat=51.786691&lon=19.469261',
+        'forecast?APPID=c12c4f042b6b42293d57b8b37a11147f&units=metric',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
