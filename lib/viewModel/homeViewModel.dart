@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather/localizations/mainLocalizations.dart';
+import 'package:weather/common/assets.dart';
 import 'package:weather/weather/forecast.dart';
 import 'package:weather/weather/weatherUseCase.dart';
 
@@ -19,6 +20,10 @@ class HomeViewModel extends ChangeNotifier {
   Forecast _forecast;
 
   Forecast get forecast => _forecast;
+
+  String _backgroundImage = Assets.clearSkyImage;
+
+  String get backgroundImage => _backgroundImage;
 
   void loadWeatherForDefaultLocation() {
     _weatherUseCase

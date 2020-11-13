@@ -34,10 +34,16 @@ class WeatherApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        appBarTheme: AppBarTheme(
+          color: Colors.transparent,
+          centerTitle: true,
+          elevation: 0,
+        ),
       ),
       home: ChangeNotifierProvider(
-        create: (context) =>
-            _kiwiContainer.resolve<ViewModelFactory>().createHomeViewModel(context),
+        create: (context) => _kiwiContainer
+            .resolve<ViewModelFactory>()
+            .createHomeViewModel(context),
         child: HomeScreen(),
       ),
       localizationsDelegates: [
