@@ -13,7 +13,7 @@ class WeatherUseCase {
     ForecastSchema forecastSchema = await _weatherClient.getForecast(lat, lon);
     Weather currentWeather =
         _createWeather(forecastSchema.list.first.weather.first);
-    return Forecast(currentWeather);
+    return Forecast(forecastSchema.city.name, currentWeather);
   }
 
   Weather _createWeather(WeatherSchema currentWeatherSchema) {

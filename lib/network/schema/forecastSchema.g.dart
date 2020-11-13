@@ -13,10 +13,14 @@ ForecastSchema _$ForecastSchemaFromJson(Map<String, dynamic> json) {
             ? null
             : ForecastDetailsSchema.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['city'] == null
+        ? null
+        : CitySchema.fromJson(json['city'] as Map<String, dynamic>),
   );
 }
 
 Map<String, dynamic> _$ForecastSchemaToJson(ForecastSchema instance) =>
     <String, dynamic>{
       'list': instance.list,
+      'city': instance.city,
     };
