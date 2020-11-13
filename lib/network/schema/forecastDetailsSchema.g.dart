@@ -14,6 +14,9 @@ ForecastDetailsSchema _$ForecastDetailsSchemaFromJson(
             ? null
             : WeatherSchema.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['main'] == null
+        ? null
+        : MainSchema.fromJson(json['main'] as Map<String, dynamic>),
   );
 }
 
@@ -21,4 +24,5 @@ Map<String, dynamic> _$ForecastDetailsSchemaToJson(
         ForecastDetailsSchema instance) =>
     <String, dynamic>{
       'weather': instance.weather,
+      'main': instance.main,
     };

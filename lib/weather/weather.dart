@@ -19,5 +19,7 @@ class Weather {
 
   WeatherSymbol symbol;
 
-  Weather(this.description, this.symbol);
+  double temperature;
+
+  Weather(this.description, this.symbol, this.temperature);
 }

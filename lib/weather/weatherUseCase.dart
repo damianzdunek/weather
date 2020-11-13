@@ -1,4 +1,5 @@
 import 'package:weather/network/schema/forecastSchema.dart';
+import 'package:weather/network/schema/mainSchema.dart';
 import 'package:weather/network/schema/weatherSchema.dart';
 import 'package:weather/network/weatherClient.dart';
 import 'package:weather/weather/forecast.dart';
@@ -11,16 +12,18 @@ class WeatherUseCase {
 
   Future<Forecast> fetchForecast(double lat, double lon) async {
     ForecastSchema forecastSchema = await _weatherClient.getForecast(lat, lon);
-    Weather currentWeather =
-        _createWeather(forecastSchema.list.first.weather.first);
+    Weather currentWeather = _createWeather(
+        forecastSchema.list.first.weather.first,
+        forecastSchema.list.first.main);
     return Forecast(forecastSchema.city.name, currentWeather);
   }
 
-  Weather _createWeather(WeatherSchema currentWeatherSchema) {
+  Weather _createWeather(
+      WeatherSchema currentWeatherSchema, MainSchema mainSchema) {
     WeatherSymbol weatherSymbol =
         _convertStringToWeatherSymbol(currentWeatherSchema.icon);
-    Weather currentWeather =
-        Weather(currentWeatherSchema.description, weatherSymbol);
+    Weather currentWeather = Weather(
+        currentWeatherSchema.description, weatherSymbol, mainSchema.temp);
 
     return currentWeather;
   }
