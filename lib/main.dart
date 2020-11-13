@@ -5,7 +5,7 @@ import 'package:kiwi/kiwi.dart';
 import 'package:provider/provider.dart';
 import 'package:weather/localizations/mainLocalizations.dart';
 import 'package:weather/network/weatherClient.dart';
-import 'package:weather/viewModel/homeViewModel.dart';
+import 'package:weather/viewModel/viewModelFactory.dart';
 import 'package:weather/views/homeScreen.dart';
 import 'package:weather/weather/weatherUseCase.dart';
 
@@ -19,6 +19,8 @@ void initializeKiwiContainer() {
   kiwiContainer.registerInstance(WeatherClient(Dio()));
   kiwiContainer
       .registerInstance(WeatherUseCase(kiwiContainer.resolve<WeatherClient>()));
+  kiwiContainer.registerSingleton(
+      (container) => ViewModelFactory(container.resolve<WeatherUseCase>()));
 }
 
 class WeatherApp extends StatelessWidget {
@@ -34,7 +36,8 @@ class WeatherApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: ChangeNotifierProvider(
-        create: (context) => HomeViewModel(context, _kiwiContainer.resolve<WeatherUseCase>()),
+        create: (context) =>
+            _kiwiContainer.resolve<ViewModelFactory>().createHomeViewModel(context),
         child: HomeScreen(),
       ),
       localizationsDelegates: [
