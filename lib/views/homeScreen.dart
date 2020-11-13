@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:weather/localizations/mainLocalizations.dart';
 import 'package:weather/viewModel/homeViewModel.dart';
+import 'package:weather/weather/forecast.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeViewModel viewModel = Provider.of<HomeViewModel>(context);
 
-    if (viewModel.forecast == null) {
+    Forecast forecast = viewModel.forecast;
+    if (forecast == null) {
       viewModel.loadWeatherForDefaultLocation();
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(viewModel.displayName)),
+      appBar: AppBar(
+          title: Text(forecast != null
+              ? forecast.cityName
+              : MainLocalizations.messages(context).main.title)),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -21,10 +27,10 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         child: Center(
-            child: viewModel.forecast == null
+            child: forecast == null
                 ? Text("Loading...")
                 : Text(
-                    "Forecast: ${viewModel.forecast.currentWeather.description}")),
+                    "Forecast: ${forecast.currentWeather.description}")),
       ),
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.blueGrey,
