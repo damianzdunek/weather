@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:kiwi/kiwi.dart';
@@ -32,14 +33,21 @@ class WeatherApp extends StatelessWidget {
       onGenerateTitle: (context) =>
           MainLocalizations.messages(context).main.title,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        appBarTheme: AppBarTheme(
-          color: Colors.transparent,
-          centerTitle: true,
-          elevation: 0,
-        ),
-      ),
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          indicatorColor: Colors.white,
+          appBarTheme: AppBarTheme(
+            color: Colors.transparent,
+            centerTitle: true,
+            elevation: 0,
+          ),
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: Colors.white,
+                displayColor: Colors.white,
+              ),
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          )),
       home: ChangeNotifierProvider(
         create: (context) => _kiwiContainer
             .resolve<ViewModelFactory>()
