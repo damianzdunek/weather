@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather/common/weatherIcons.dart';
-import 'package:weather/localizations/mainLocalizations.dart';
 import 'package:weather/viewModel/homeViewModel.dart';
 import 'package:weather/weather/forecast.dart';
 import 'package:weather/weather/weather.dart';
@@ -17,10 +16,7 @@ class HomeScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-          title: Text(forecast != null
-              ? forecast.cityName
-              : MainLocalizations.messages(context).main.title)),
+      appBar: AppBar(title: Text(forecast != null ? forecast.cityName : "–")),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -28,9 +24,7 @@ class HomeScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: forecast == null
-            ? _buildProgressIndicator()
-            : _buildWeatherDetailsContent(context, viewModel),
+        child: _buildWeatherDetailsContent(context, viewModel),
       ),
       extendBodyBehindAppBar: true,
     );
@@ -46,6 +40,8 @@ class HomeScreen extends StatelessWidget {
       BuildContext context, HomeViewModel viewModel) {
     assert(viewModel != null);
 
+    Forecast forecast = viewModel.forecast;
+
     return Align(
       alignment: Alignment.bottomLeft,
       child: Padding(
@@ -56,17 +52,18 @@ class HomeScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(_iconForWeatherSymbol(
-                    viewModel.forecast.currentWeather.symbol)),
+                Icon(forecast == null
+                    ? Icons.cloud_off
+                    : _iconForWeatherSymbol(forecast.currentWeather.symbol)),
                 SizedBox(width: 10),
                 Text(
-                  viewModel.forecast.currentWeather.description,
+                  forecast == null ? "-" : forecast.currentWeather.description,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ],
             ),
             Text(
-              "${viewModel.forecast.currentWeather.temperature.round()}°",
+              "${forecast == null ? "–" : forecast.currentWeather.temperature.round()}°",
               style: Theme.of(context).textTheme.headline1,
             ),
           ],
