@@ -28,9 +28,25 @@ class HomeScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: _buildWeatherDetailsContent(context, viewModel),
+        child: SafeArea(
+          child: Stack(
+            children: [
+              _buildHeader(viewModel, context),
+              _buildWeatherDetailsContent(context, viewModel),
+            ],
+          ),
+        ),
       ),
       extendBodyBehindAppBar: true,
+    );
+  }
+
+  Align _buildHeader(HomeViewModel viewModel, BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: viewModel.isWeatherForDefaultPosition
+          ? Text(MainLocalizations.messages(context).main.demo_position)
+          : null,
     );
   }
 

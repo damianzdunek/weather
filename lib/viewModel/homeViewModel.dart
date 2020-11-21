@@ -27,6 +27,10 @@ class HomeViewModel extends ChangeNotifier {
 
   int get locationPermissionRequestsCount => _locationPermissionRequestsCount;
 
+  bool _isWeatherForDefaultPosition = false;
+
+  bool get isWeatherForDefaultPosition => _isWeatherForDefaultPosition;
+
   HomeViewModel(this._context, this._weatherUseCase) {
     _checkLocationPermission();
   }
@@ -72,6 +76,7 @@ class HomeViewModel extends ChangeNotifier {
 
   void loadWeatherForDefaultPosition() {
     _loadWeatherForPosition(_defaultPositionLat, _defaultPositionLon);
+    _isWeatherForDefaultPosition = true;
   }
 
   void loadWeatherForCurrentPosition() {

@@ -23,5 +23,6 @@ class MainMessages {
 	String get ok => """OK""";
 	String get location_permission_needed => """Permission needed""";
 	String get location_permission_needed_description => """App needs location permission to get weather for your position. If you deny permissions again, app will load weather for DEMO position.""";
+	String get demo_position => """DEMO position""";
 }
 
