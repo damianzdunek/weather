@@ -33,6 +33,7 @@ dependencies:
   json_serializable: ^3.5.0
   dio: ^3.0.10
   kiwi: ^2.1.1
+  geolocator: ^6.1.7
 
 dev_dependencies:
   flutter_test:

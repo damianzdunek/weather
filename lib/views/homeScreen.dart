@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import 'package:weather/common/appLocationPermission.dart';
 import 'package:weather/common/weatherIcons.dart';
+import 'package:weather/localizations/mainLocalizations.dart';
 import 'package:weather/viewModel/homeViewModel.dart';
 import 'package:weather/weather/forecast.dart';
 import 'package:weather/weather/weather.dart';
@@ -11,8 +14,9 @@ class HomeScreen extends StatelessWidget {
     HomeViewModel viewModel = Provider.of<HomeViewModel>(context);
 
     Forecast forecast = viewModel.forecast;
+
     if (forecast == null) {
-      viewModel.loadWeatherForDefaultLocation();
+      _loadForecastOrAskForLocationPermission(viewModel, context);
     }
 
     return Scaffold(
@@ -30,9 +34,69 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  _buildProgressIndicator() {
-    return Center(
-      child: CircularProgressIndicator(),
+  void _loadForecastOrAskForLocationPermission(
+      HomeViewModel viewModel, BuildContext context) {
+    switch (viewModel.locationPermission) {
+      case (AppLocationPermission.denied):
+        _askForLocationPermission(viewModel, context);
+        break;
+      case (AppLocationPermission.granted):
+        viewModel.loadWeatherForCurrentPosition();
+        break;
+      case (AppLocationPermission.deniedForever):
+        viewModel.loadWeatherForDefaultPosition();
+        break;
+    }
+  }
+
+  void _askForLocationPermission(
+      HomeViewModel viewModel, BuildContext context) {
+    if (viewModel.locationPermissionRequestsCount == 0) {
+      viewModel.askForLocationPermission();
+    } else if (viewModel.locationPermissionRequestsCount == 1) {
+      _showLocationPermissionAlertDialog(context, viewModel);
+    } else {
+      viewModel.loadWeatherForDefaultPosition();
+    }
+  }
+
+  void _showLocationPermissionAlertDialog(
+      BuildContext context, HomeViewModel viewModel) {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return _buildLocationPermissionAlertDialog(context, viewModel);
+        },
+        barrierDismissible: false,
+      );
+    });
+  }
+
+  AlertDialog _buildLocationPermissionAlertDialog(
+      BuildContext context, HomeViewModel viewModel) {
+    return AlertDialog(
+      title: Text(
+        MainLocalizations.messages(context).main.location_permission_needed,
+        style:
+            Theme.of(context).textTheme.headline6.apply(color: Colors.black54),
+      ),
+      content: Text(
+        MainLocalizations.messages(context)
+            .main
+            .location_permission_needed_description,
+        style:
+            Theme.of(context).textTheme.subtitle1.apply(color: Colors.black45),
+      ),
+      actions: [
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            viewModel.askForLocationPermission();
+          },
+          child: Text(MainLocalizations.messages(context).main.ok),
+        )
+      ],
     );
   }
 

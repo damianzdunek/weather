@@ -1,3 +1,5 @@
 main:
   title: Weather
   ok: OK
+  location_permission_needed: Permission needed
+  location_permission_needed_description: App needs location permission to get weather for your position. If you deny permissions again, app will load weather for DEMO position.
