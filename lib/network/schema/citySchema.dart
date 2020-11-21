@@ -6,7 +6,18 @@ part 'citySchema.g.dart';
 class CitySchema {
   String name;
 
-  CitySchema(this.name);
+  int population;
+
+  int timezone;
+
+  String country;
+
+  int sunrise;
+
+  int sunset;
+
+  CitySchema(this.name, this.population, this.timezone, this.country,
+      this.sunrise, this.sunset);
 
   factory CitySchema.fromJson(Map<String, dynamic> json) => _$CitySchemaFromJson(json);
   Map<String, dynamic> toJson() => _$CitySchemaToJson(this);

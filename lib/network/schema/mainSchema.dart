@@ -6,6 +6,12 @@ part 'mainSchema.g.dart';
 class MainSchema {
   double temp;
 
+  double feels_like;
+
+  int pressure;
+
+  int humidity;
+
   MainSchema(this.temp);
 
   factory MainSchema.fromJson(Map<String, dynamic> json) => _$MainSchemaFromJson(json);
