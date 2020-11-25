@@ -13,14 +13,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeViewModel viewModel = Provider.of<HomeViewModel>(context);
 
-    Forecast forecast = viewModel.forecast;
+    Weather currentWeather = viewModel.currentWeather;
 
-    if (forecast == null) {
+    if (currentWeather == null) {
       _loadForecastOrAskForLocationPermission(viewModel, context);
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text(forecast != null ? forecast.cityName : "–")),
+      appBar: AppBar(title: Text(currentWeather != null ? currentWeather.cityName : "–")),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -120,7 +120,7 @@ class HomeScreen extends StatelessWidget {
       BuildContext context, HomeViewModel viewModel) {
     assert(viewModel != null);
 
-    Forecast forecast = viewModel.forecast;
+    Weather weather = viewModel.currentWeather;
 
     return Align(
       alignment: Alignment.bottomLeft,
@@ -132,18 +132,18 @@ class HomeScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(forecast == null
+                Icon(weather == null
                     ? Icons.cloud_off
-                    : _iconForWeatherSymbol(forecast.currentWeather.symbol)),
+                    : _iconForWeatherSymbol(weather.symbol)),
                 SizedBox(width: 10),
                 Text(
-                  forecast == null ? "-" : forecast.currentWeather.description,
+                  weather == null ? "-" : weather.description,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ],
             ),
             Text(
-              "${forecast == null ? "–" : forecast.currentWeather.temperature.round()}°",
+              "${weather == null ? "–" : weather.temperature.round()}°",
               style: Theme.of(context).textTheme.headline1,
             ),
           ],

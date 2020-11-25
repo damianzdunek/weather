@@ -15,11 +15,13 @@ enum WeatherSymbol {
 }
 
 class Weather {
+  String cityName;
+
   String description;
 
   WeatherSymbol symbol;
 
   double temperature;
 
-  Weather(this.description, this.symbol, this.temperature);
+  Weather(this.cityName, this.description, this.symbol, this.temperature);
 }

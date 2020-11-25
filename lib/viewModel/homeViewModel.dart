@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/common/appLocationPermission.dart';
 import 'package:weather/common/assets.dart';
-import 'package:weather/weather/forecast.dart';
 import 'package:weather/weather/weather.dart';
 import 'package:weather/weather/weatherUseCase.dart';
 
@@ -15,9 +14,9 @@ class HomeViewModel extends ChangeNotifier {
 
   final WeatherUseCase _weatherUseCase;
 
-  Forecast _forecast;
+  Weather _currentWeather;
 
-  Forecast get forecast => _forecast;
+  Weather get currentWeather => _currentWeather;
 
   AppLocationPermission _locationPermission = AppLocationPermission.unknown;
 
@@ -58,7 +57,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   String get backgroundImage {
-    if (forecast == null) {
+    if (currentWeather == null) {
       return Assets.clearSkyImage;
     } else {
       return _backgroundImageForCurrentWeather;
@@ -66,7 +65,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   String get _backgroundImageForCurrentWeather {
-    switch (forecast.currentWeather.symbol) {
+    switch (currentWeather.symbol) {
       case WeatherSymbol.sun:
         return Assets.clearSkyImage;
       default:
@@ -85,8 +84,8 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void _loadWeatherForPosition(double lat, double lon) {
-    _weatherUseCase.fetchForecast(lat, lon).then((value) {
-      _forecast = value;
+    _weatherUseCase.fetchCurrentWeather(lat, lon).then((value) {
+      _currentWeather = value;
       notifyListeners();
     });
   }

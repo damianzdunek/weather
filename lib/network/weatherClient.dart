@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
+import 'package:weather/network/schema/currentWeatherSchema.dart';
 import 'package:weather/network/weatherClientConstants.dart';
 
 import 'schema/forecastSchema.dart';
@@ -12,4 +13,7 @@ abstract class WeatherClient {
 
   @GET("forecast?APPID=${WeatherClientConstants.appId}&units=metric")
   Future<ForecastSchema> getForecast(@Query("lat") double lat, @Query("lon") double lon);
+
+  @GET("weather?APPID=${WeatherClientConstants.appId}&units=metric")
+  Future<CurrentWeatherSchema> getCurrentWeather(@Query("lat") double lat, @Query("lon") double lon);
 }

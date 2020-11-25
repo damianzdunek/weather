@@ -1,3 +1,4 @@
+import 'package:weather/network/schema/currentWeatherSchema.dart';
 import 'package:weather/network/schema/forecastSchema.dart';
 import 'package:weather/network/schema/mainSchema.dart';
 import 'package:weather/network/schema/weatherSchema.dart';
@@ -13,17 +14,26 @@ class WeatherUseCase {
   Future<Forecast> fetchForecast(double lat, double lon) async {
     ForecastSchema forecastSchema = await _weatherClient.getForecast(lat, lon);
     Weather currentWeather = _createWeather(
+        forecastSchema.city.name,
         forecastSchema.list.first.weather.first,
         forecastSchema.list.first.main);
-    return Forecast(forecastSchema.city.name, currentWeather);
+    return Forecast(currentWeather);
   }
 
-  Weather _createWeather(
-      WeatherSchema currentWeatherSchema, MainSchema mainSchema) {
+  Future<Weather> fetchCurrentWeather(double lat, double lon) async {
+    CurrentWeatherSchema currentWeatherSchema =
+    await _weatherClient.getCurrentWeather(lat, lon);
+    Weather currentWeather = _createWeather(currentWeatherSchema.name,
+        currentWeatherSchema.weather.first, currentWeatherSchema.main);
+    return currentWeather;
+  }
+
+  Weather _createWeather(String cityName, WeatherSchema currentWeatherSchema,
+      MainSchema mainSchema) {
     WeatherSymbol weatherSymbol =
         _convertStringToWeatherSymbol(currentWeatherSchema.icon);
-    Weather currentWeather = Weather(
-        currentWeatherSchema.description, weatherSymbol, mainSchema.temp);
+    Weather currentWeather = Weather(cityName, currentWeatherSchema.description,
+        weatherSymbol, mainSchema.temp);
 
     return currentWeather;
   }
