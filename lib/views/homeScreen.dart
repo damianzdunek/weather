@@ -5,10 +5,11 @@ import 'package:weather/common/appLocationPermission.dart';
 import 'package:weather/common/weatherIcons.dart';
 import 'package:weather/localizations/mainLocalizations.dart';
 import 'package:weather/viewModel/homeViewModel.dart';
-import 'package:weather/weather/forecast.dart';
 import 'package:weather/weather/weather.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const int _itemExtentBottomPadding = 25;
+
   @override
   Widget build(BuildContext context) {
     HomeViewModel viewModel = Provider.of<HomeViewModel>(context);
@@ -19,8 +20,10 @@ class HomeScreen extends StatelessWidget {
       _loadForecastOrAskForLocationPermission(viewModel, context);
     }
 
+    AppBar appBar = _buildAppBar(currentWeather, viewModel, context);
+
     return Scaffold(
-      appBar: AppBar(title: Text(currentWeather != null ? currentWeather.cityName : "–")),
+      appBar: appBar,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -29,25 +32,37 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: Stack(
-            children: [
-              _buildHeader(viewModel, context),
-              _buildWeatherDetailsContent(context, viewModel),
-            ],
-          ),
-        ),
+            child: ListView(
+          itemExtent: _calculateItemExtent(context, appBar),
+          physics: PageScrollPhysics(),
+          children: [
+            _buildWeatherOverview(context, viewModel),
+          ],
+        )),
       ),
       extendBodyBehindAppBar: true,
     );
   }
 
-  Align _buildHeader(HomeViewModel viewModel, BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: viewModel.isWeatherForDefaultPosition
-          ? Text(MainLocalizations.messages(context).main.demo_position)
-          : null,
+  double _calculateItemExtent(BuildContext context, AppBar appBar) {
+    return MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        _itemExtentBottomPadding;
+  }
+
+  AppBar _buildAppBar(
+      Weather currentWeather, HomeViewModel viewModel, BuildContext context) {
+    String cityName = currentWeather != null ? currentWeather.cityName : "–";
+    if (viewModel.isWeatherForDefaultPosition) {
+      cityName +=
+          " (${MainLocalizations.messages(context).main.demo_position})";
+    }
+
+    AppBar appBar = AppBar(
+      title: Text(cityName),
     );
+
+    return appBar;
   }
 
   void _loadForecastOrAskForLocationPermission(
@@ -116,8 +131,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildWeatherDetailsContent(
-      BuildContext context, HomeViewModel viewModel) {
+  Widget _buildWeatherOverview(BuildContext context, HomeViewModel viewModel) {
     assert(viewModel != null);
 
     Weather weather = viewModel.currentWeather;
